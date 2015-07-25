@@ -1,0 +1,17 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/trusty64"
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 3072
+    v.cpus = 2
+  end
+
+  config.vm.define "machine" do |m|
+    m.vm.hostname = "devstack"
+    m.vm.network "private_network", ip: "192.168.30.30"
+    m.vm.provision :shell, privileged: false, path: "devstack.sh"
+  end  
+end
