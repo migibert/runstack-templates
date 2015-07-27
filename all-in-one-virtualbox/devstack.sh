@@ -119,7 +119,10 @@ for e in $(openstack endpoint list | grep -v identity | grep -e '^| [a-f0-9]' | 
     openstack endpoint delete ${e}
 done
 
-openstack endpoint delete $(openstack endpoint list -c ID -f csv --quote none | tail -1)
+endpoints=$(openstack endpoint list -c ID -f csv --quote none | tail -1)
+if [ $endpoints != "ID" ]; then
+    openstack endpoint delete $(openstack endpoint list -c ID -f csv --quote none | tail -1)
+fi
 
 keystone --os-token    $(openstack token issue -f value -c id 2>/dev/null) \
          --os-endpoint http://127.0.0.1:35357/v2.0                         \
